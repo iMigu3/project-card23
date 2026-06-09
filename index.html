@@ -20,7 +20,7 @@
             background-size: 400% 400%;
             animation: fondo AnimacionFondo 12s ease infinite;
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Permite colocar la galería debajo */
             align-items: center;
             padding: 20px;
             transition: background 1s ease; /* Transición suave para el cambio de color */
@@ -38,6 +38,7 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* TARJETA PRINCIPAL */
         .tarjeta {
             position: relative;
             z-index: 10;
@@ -50,8 +51,7 @@
             border-radius: 25px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-height: 90vh;
-            overflow-y: auto;
+            margin-bottom: 30px; /* Margen para separar la tarjeta de la galería */
             transition: background 0.5s ease, transform 0.3s ease;
         }
 
@@ -59,11 +59,6 @@
         body.modo-oscuro .tarjeta {
             background: rgba(255, 255, 255, 0.95);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-        }
-
-        .tarjeta::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
         }
 
         h1 {
@@ -138,6 +133,64 @@
             box-shadow: 0 4px 15px rgba(230, 92, 0, 0.4);
         }
 
+        /* --- NUEVA SECCIÓN: GALERÍA DE RECUERDOS --- */
+        .galeria-contenedor {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 450px; /* Alineado exactamente con el ancho de la tarjeta */
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            margin-bottom: 20px;
+            transition: background 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        body.modo-oscuro .galeria-contenedor {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .galeria-titulo {
+            color: #6a11cb;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            transition: color 0.5s ease;
+        }
+        
+        body.modo-oscuro .galeria-titulo {
+            color: #2575fc;
+        }
+
+        /* Cuadrícula vertical responsiva para el contenido */
+        .galeria-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Estilo para las imágenes y videos extras */
+        .galeria-item {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: block;
+            background: #000;
+        }
+
+        img.galeria-item {
+            height: auto;
+            object-fit: cover;
+        }
+
+        video.galeria-item {
+            outline: none;
+        }
+
         /* FIGURAS DE FONDO ASEGURADAS */
         .flor, .nota, .rayo {
             position: absolute;
@@ -148,12 +201,12 @@
         .flor { font-size: 24px; animation: caer linear infinite; opacity: 0.7; }
         @keyframes caer {
             from { transform: translateY(-50px) rotate(0deg); }
-            to { transform: translateY(105vh) rotate(360deg); }
+            to { transform: translateY(160vh) rotate(360deg); } /* Extendido para cubrir el scroll */
         }
 
         .nota { font-size: 22px; color: white; animation: subir linear infinite; opacity: 0.6; }
         @keyframes subir {
-            from { transform: translateY(105vh); }
+            from { transform: translateY(160vh); }
             to { transform: translateY(-50px); }
         }
 
@@ -198,6 +251,20 @@
         </button>
     </div>
 
+    <div class="galeria-contenedor">
+        <h2 class="galeria-titulo">📸 Mejores Momentos ✨</h2>
+        
+        <div class="galeria-grid">
+            <img class="galeria-item" src="foto2.jpg" alt="Recuerdo especial">
+            <img class="galeria-item" src="foto3.jpg" alt="Recuerdo especial">
+            <img class="galeria-item" src="foto4.jpg" alt="Recuerdo especial">
+            
+            <video class="galeria-item" src="video1.mp4" controls playsinline></video>
+            <video class="galeria-item" src="video2.mp4" controls playsinline></video>
+            
+        </div>
+    </div>
+
     <script>
         const miAudio = document.getElementById("musica-fondo");
         const boton = document.getElementById("btn-control");
@@ -236,8 +303,8 @@
             );
         }
 
-        // Generación dinámica de elementos del fondo
-        for(let i=0; i<15; i++){
+        // Generación dinámica de elementos del fondo adaptados al scroll
+        for(let i=0; i<20; i++){
             let flor = document.createElement("div");
             flor.classList.add("flor");
             flor.innerHTML = "🌸";
@@ -246,7 +313,7 @@
             document.body.appendChild(flor);
         }
 
-        for(let i=0; i<12; i++){
+        for(let i=0; i<15; i++){
             let nota = document.createElement("div");
             nota.classList.add("nota");
             nota.innerHTML = Math.random() > 0.5 ? "♪" : "♫";
@@ -255,12 +322,12 @@
             document.body.appendChild(nota);
         }
 
-        for(let i=0; i<6; i++){
+        for(let i=0; i<8; i++){
             let rayo = document.createElement("div");
             rayo.classList.add("rayo");
             rayo.innerHTML = "⚡";
             rayo.style.left = (Math.random() * 90) + "vw";
-            rayo.style.top = (Math.random() * 85) + "vh";
+            rayo.style.top = (Math.random() * 140) + "vh"; /* Repartidos en todo el largo */
             document.body.appendChild(rayo);
         }
     </script>

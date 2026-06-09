@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden; /* Evita desbordamiento horizontal */
+            overflow-x: hidden;
             min-height: 100vh;
             background: linear-gradient(-45deg, #ff9a9e, #fbc2eb, #a18cd1, #6a11cb);
             background-size: 400% 400%;
@@ -34,7 +34,7 @@
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 450px; /* Tamaño ideal para smartphones, no se ve gigante en PC */
+            max-width: 450px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -42,12 +42,10 @@
             border-radius: 25px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            /* Permitir scroll interno si la pantalla es extremadamente pequeña */
             max-height: 90vh;
             overflow-y: auto;
         }
 
-        /* Ocultar barra de scroll interna para mantener la estética */
         .tarjeta::-webkit-scrollbar {
             width: 0px;
             background: transparent;
@@ -92,86 +90,68 @@
             margin: 15px 0;
         }
 
-        button {
+        /* BOTÓN DE MÚSICA REFORZADO PARA CLICS */
+        .btn-musica {
+            position: relative; 
+            z-index: 100; /* Esto hace que se ponga al frente de las flores y notas */
             margin-top: 10px;
             padding: 12px 25px;
             border: none;
             border-radius: 25px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
             color: white;
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
             box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, background 0.3s;
             width: 100%;
-            max-width: 250px;
+            max-width: 260px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        button:active {
-            transform: scale(0.98);
+        .btn-musica:active {
+            transform: scale(0.95);
+        }
+
+        /* Estilo cuando la música está activa */
+        .btn-musica.reproduciendo {
+            background: linear-gradient(135deg, #e65c00 0%, #f9d423 100%);
+            box-shadow: 0 4px 15px rgba(230, 92, 0, 0.4);
         }
 
         /* ELEMENTOS ANIMADOS DEL FONDO */
-        .flor {
+        .flor, .nota, .rayo {
             position: absolute;
-            font-size: 24px;
-            animation: caer linear infinite;
-            opacity: 0.7;
-            pointer-events: none;
+            pointer-events: none; /* Evita que bloqueen la pantalla */
             z-index: 1;
         }
 
+        .flor { font-size: 24px; animation: caer linear infinite; opacity: 0.7; }
         @keyframes caer {
-            from {
-                transform: translateY(-50px) rotate(0deg);
-            }
-            to {
-                transform: translateY(105vh) rotate(360deg);
-            }
+            from { transform: translateY(-50px) rotate(0deg); }
+            to { transform: translateY(105vh) rotate(360deg); }
         }
 
-        .nota {
-            position: absolute;
-            font-size: 22px;
-            color: white;
-            animation: subir linear infinite;
-            opacity: 0.6;
-            pointer-events: none;
-            z-index: 1;
-        }
-
+        .nota { font-size: 22px; color: white; animation: subir linear infinite; opacity: 0.6; }
         @keyframes subir {
-            from {
-                transform: translateY(105vh);
-            }
-            to {
-                transform: translateY(-50px);
-            }
+            from { transform: translateY(105vh); }
+            to { transform: translateY(-50px); }
         }
 
-        .rayo {
-            position: absolute;
-            font-size: 28px;
-            animation: destello 1s infinite alternate;
-            pointer-events: none;
-            z-index: 1;
-        }
-
+        .rayo { font-size: 28px; animation: destello 1s infinite alternate; }
         @keyframes destello {
-            from {
-                opacity: 0.2;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 0.8;
-                transform: scale(1.1);
-                filter: drop-shadow(0 0 8px rgba(255, 255, 0, 0.6));
-            }
+            from { opacity: 0.2; transform: scale(0.9); }
+            to { opacity: 0.8; transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255, 255, 0, 0.6)); }
         }
     </style>
 </head>
 <body>
+
+    <audio id="musica-fondo" src="musica.mp3" loop></audio>
 
     <div class="tarjeta">
         <h1>🎂 Feliz Cumpleaños 🎂</h1>
@@ -198,38 +178,53 @@
             🌸 🐱 🎧 ✨
         </div>
 
-        <button onclick="sorpresa()">
-            🎁 Abrir Mensaje Especial
+        <button id="btn-control" class="btn-musica" onclick="controlarMusica()">
+            <span>🎵 Reproducir Música y Mensaje</span>
         </button>
     </div>
 
     <script>
-        function sorpresa(){
-            alert(
-                "¡Feliz cumpleaños, Itzel! 🎂✨
+        const miAudio = document.getElementById("musica-fondo");
+        const boton = document.getElementById("btn-control");
+        let primeraVez = true;
 
-" +
-                "Gracias por tantos años de amistad y recuerdos.
-" +
-                "Espero que hoy disfrutes de un día increíble,
-" +
+        function controlarMusica() {
+            if (miAudio.paused) {
+                miAudio.play().catch(error => console.log("Error al reproducir audio:", error));
+                boton.classList.add("reproduciendo");
+                boton.innerHTML = "⏸️ Pausar Música";
+                
+                // Solo muestra el mensaje especial la primera vez que le da Play
+                if (primeraVez) {
+                    setTimeout(mostrarMensaje, 400); // Pequeña pausa para que empiece la música antes
+                    primeraVez = false;
+                }
+            } else {
+                miAudio.pause();
+                boton.classList.remove("reproduciendo");
+                boton.innerHTML = "▶️ Reanudar Música";
+            }
+        }
+
+        function mostrarMensaje(){
+            alert(
+                "¡Feliz cumpleaños, Itzel! 🎂✨\n\n" +
+                "Gracias por tantos años de amistad y recuerdos.\n" +
+                "Espero que hoy disfrutes de un día increíble,\n" +
                 "lleno de felicidad, música y momentos especiales. 🌸🐱🎧"
             );
         }
 
-        // Generación dinámica adaptada para evitar desbordes en móviles
-        // Flores
+        // Generación dinámica de elementos del fondo
         for(let i=0; i<15; i++){
             let flor = document.createElement("div");
             flor.classList.add("flor");
             flor.innerHTML = "🌸";
-            flor.style.left = (Math.random() * 92) + "vw"; // Un margen seguro para que no causen scroll horizontal
+            flor.style.left = (Math.random() * 92) + "vw";
             flor.style.animationDuration = (6 + Math.random() * 8) + "s";
-            flor.style.delay = (Math.random() * 5) + "s";
             document.body.appendChild(flor);
         }
 
-        // Notas
         for(let i=0; i<12; i++){
             let nota = document.createElement("div");
             nota.classList.add("nota");
@@ -239,7 +234,6 @@
             document.body.appendChild(nota);
         }
 
-        // Rayos
         for(let i=0; i<6; i++){
             let rayo = document.createElement("div");
             rayo.classList.add("rayo");

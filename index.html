@@ -11,20 +11,28 @@
             box-sizing: border-box;
         }
 
+        /* FONDO PREDETERMINADO (CLARITO) */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
             background: linear-gradient(-45deg, #ff9a9e, #fbc2eb, #a18cd1, #6a11cb);
             background-size: 400% 400%;
-            animation: fondo 12s ease infinite;
+            animation: fondo AnimacionFondo 12s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: background 1s ease; /* Transición suave para el cambio de color */
         }
 
-        @keyframes fondo {
+        /* NUEVO FONDO OSCURO (MODO FIESTA) */
+        body.modo-oscuro {
+            background: linear-gradient(-45deg, #0f0c20, #15102a, #050508, #1a0033);
+            background-size: 400% 400%;
+        }
+
+        @keyframes AnimacionFondo {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -44,6 +52,13 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             max-height: 90vh;
             overflow-y: auto;
+            transition: background 0.5s ease, transform 0.3s ease;
+        }
+
+        /* Pequeño ajuste visual a la tarjeta en modo oscuro para que combine mejor */
+        body.modo-oscuro .tarjeta {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
         }
 
         .tarjeta::-webkit-scrollbar {
@@ -90,10 +105,10 @@
             margin: 15px 0;
         }
 
-        /* BOTÓN DE MÚSICA REFORZADO PARA CLICS */
+        /* BOTÓN DE MÚSICA REFORZADO */
         .btn-musica {
             position: relative; 
-            z-index: 100; /* Esto hace que se ponga al frente de las flores y notas */
+            z-index: 100; 
             margin-top: 10px;
             padding: 12px 25px;
             border: none;
@@ -117,17 +132,17 @@
             transform: scale(0.95);
         }
 
-        /* Estilo cuando la música está activa */
+        /* Botón en modo activo */
         .btn-musica.reproduciendo {
             background: linear-gradient(135deg, #e65c00 0%, #f9d423 100%);
             box-shadow: 0 4px 15px rgba(230, 92, 0, 0.4);
         }
 
-        /* ELEMENTOS ANIMADOS DEL FONDO */
+        /* FIGURAS DE FONDO ASEGURADAS */
         .flor, .nota, .rayo {
             position: absolute;
-            pointer-events: none; /* Evita que bloqueen la pantalla */
-            z-index: 1;
+            pointer-events: none; 
+            z-index: 2; /* Un nivel arriba del body para que nunca queden tapadas */
         }
 
         .flor { font-size: 24px; animation: caer linear infinite; opacity: 0.7; }
@@ -145,7 +160,7 @@
         .rayo { font-size: 28px; animation: destello 1s infinite alternate; }
         @keyframes destello {
             from { opacity: 0.2; transform: scale(0.9); }
-            to { opacity: 0.8; transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255, 255, 0, 0.6)); }
+            to { opacity: 0.9; transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.8)); }
         }
     </style>
 </head>
@@ -186,21 +201,27 @@
     <script>
         const miAudio = document.getElementById("musica-fondo");
         const boton = document.getElementById("btn-control");
+        const cuerpoPagina = document.body;
         let primeraVez = true;
 
         function controlarMusica() {
             if (miAudio.paused) {
                 miAudio.play().catch(error => console.log("Error al reproducir audio:", error));
+                
+                // Activa el modo oscuro y cambia diseño del botón
+                cuerpoPagina.classList.add("modo-oscuro");
                 boton.classList.add("reproduciendo");
                 boton.innerHTML = "⏸️ Pausar Música";
                 
-                // Solo muestra el mensaje especial la primera vez que le da Play
                 if (primeraVez) {
-                    setTimeout(mostrarMensaje, 400); // Pequeña pausa para que empiece la música antes
+                    setTimeout(mostrarMensaje, 400); 
                     primeraVez = false;
                 }
             } else {
                 miAudio.pause();
+                
+                // Desactiva el modo oscuro y regresa al fondo clarito
+                cuerpoPagina.classList.remove("modo-oscuro");
                 boton.classList.remove("reproduciendo");
                 boton.innerHTML = "▶️ Reanudar Música";
             }

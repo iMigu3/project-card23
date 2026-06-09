@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Itzel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden; /* Evita desbordamiento horizontal */
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ff9a9e, #fbc2eb, #a18cd1, #6a11cb);
+            background-size: 400% 400%;
+            animation: fondo 12s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes fondo {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .tarjeta {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 450px; /* Tamaño ideal para smartphones, no se ve gigante en PC */
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 25px 20px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            /* Permitir scroll interno si la pantalla es extremadamente pequeña */
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Ocultar barra de scroll interna para mantener la estética */
+        .tarjeta::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        h1 {
+            color: #ff4f81;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .foto-contenedor {
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto 15px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .foto-contenedor img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        p {
+            margin: 12px 0;
+            line-height: 1.6;
+            color: #333;
+            font-size: 1rem;
+            word-wrap: break-word;
+        }
+
+        .emojis-decorativos {
+            font-size: 1.3rem;
+            margin: 15px 0;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* ELEMENTOS ANIMADOS DEL FONDO */
+        .flor {
+            position: absolute;
+            font-size: 24px;
+            animation: caer linear infinite;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes caer {
+            from {
+                transform: translateY(-50px) rotate(0deg);
+            }
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+
+        .nota {
+            position: absolute;
+            font-size: 22px;
+            color: white;
+            animation: subir linear infinite;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes subir {
+            from {
+                transform: translateY(105vh);
+            }
+            to {
+                transform: translateY(-50px);
+            }
+        }
+
+        .rayo {
+            position: absolute;
+            font-size: 28px;
+            animation: destello 1s infinite alternate;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes destello {
+            from {
+                opacity: 0.2;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 0.8;
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 8px rgba(255, 255, 0, 0.6));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tarjeta">
+        <h1>🎂 Feliz Cumpleaños 🎂</h1>
+        
+        <div class="foto-contenedor">
+            <img src="foto.jpg" alt="Foto con mi prima">
+        </div>
+
+        <p><strong>Holaa primaa 😊</strong></p>
+
+        <p>
+            Quería aprovechar tu cumpleaños para recordarte lo mucho que te valoro. 
+            Desde que éramos niños hemos compartido unos recuerdos y momentos tan increíbles, 
+            que siempre voy a guardar con cariño.
+        </p>
+
+        <p>
+            Espero disfrutes tu día tan especial, pásatela a todo dar, que sigan las sonrisas, 
+            música a todo volumen y las salidas. 
+            <br><strong>&lt;3 MUCHAS MUCHAS FELICIDADES &lt;3</strong>
+        </p>
+
+        <div class="emojis-decorativos">
+            🌸 🐱 🎧 ✨
+        </div>
+
+        <button onclick="sorpresa()">
+            🎁 Abrir Mensaje Especial
+        </button>
+    </div>
+
+    <script>
+        function sorpresa(){
+            alert(
+                "¡Feliz cumpleaños, Itzel! 🎂✨
+
+" +
+                "Gracias por tantos años de amistad y recuerdos.
+" +
+                "Espero que hoy disfrutes de un día increíble,
+" +
+                "lleno de felicidad, música y momentos especiales. 🌸🐱🎧"
+            );
+        }
+
+        // Generación dinámica adaptada para evitar desbordes en móviles
+        // Flores
+        for(let i=0; i<15; i++){
+            let flor = document.createElement("div");
+            flor.classList.add("flor");
+            flor.innerHTML = "🌸";
+            flor.style.left = (Math.random() * 92) + "vw"; // Un margen seguro para que no causen scroll horizontal
+            flor.style.animationDuration = (6 + Math.random() * 8) + "s";
+            flor.style.delay = (Math.random() * 5) + "s";
+            document.body.appendChild(flor);
+        }
+
+        // Notas
+        for(let i=0; i<12; i++){
+            let nota = document.createElement("div");
+            nota.classList.add("nota");
+            nota.innerHTML = Math.random() > 0.5 ? "♪" : "♫";
+            nota.style.left = (Math.random() * 92) + "vw";
+            nota.style.animationDuration = (7 + Math.random() * 7) + "s";
+            document.body.appendChild(nota);
+        }
+
+        // Rayos
+        for(let i=0; i<6; i++){
+            let rayo = document.createElement("div");
+            rayo.classList.add("rayo");
+            rayo.innerHTML = "⚡";
+            rayo.style.left = (Math.random() * 90) + "vw";
+            rayo.style.top = (Math.random() * 85) + "vh";
+            document.body.appendChild(rayo);
+        }
+    </script>
+</body>
+</html>
